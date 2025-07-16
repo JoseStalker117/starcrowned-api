@@ -1,0 +1,11 @@
+services:
+  starcrowned-api:
+    build:
+      context: .
+    image: starcrowned-api:dev
+    ports:
+      - 7777:7777
+    volumes:
+      - ./routers:/app/routers/
+
+    command: python3 main.py
