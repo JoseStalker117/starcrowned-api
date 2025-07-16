@@ -1,7 +1,7 @@
 from fastapi import APIRouter, HTTPException, status
 from pydantic import BaseModel
 from typing import List, Optional
-import fbcrowned as fb
+from . import fbcrowned as fb
 
 # Creamos el router para los productos
 router = APIRouter(
