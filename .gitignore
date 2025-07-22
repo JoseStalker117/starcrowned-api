@@ -1,3 +1,5 @@
 /__pycache__
 /routers/__pycache__
 /routers/starcrowned-key.json
+/venv
+config.env

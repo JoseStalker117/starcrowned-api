@@ -1,11 +1,13 @@
-import firebase_admin
+import firebase_admin, os
 from  firebase_admin import credentials, db
+from dotenv import load_dotenv
 
+load_dotenv('./config.env')
 
-cred = credentials.Certificate('starcrowned-key.json')
+cred = credentials.Certificate('./routers/starcrowned-key.json')
 try:
     firebase_admin.initialize_app(cred, {
-        'databaseURL': 'https://starcrowned-4d560-default-rtdb.firebaseio.com/'
+        'databaseURL': os.getenv("fbdb_url")
     })
     print("[Firebase] Conexión inicializada correctamente")
 except ValueError:
