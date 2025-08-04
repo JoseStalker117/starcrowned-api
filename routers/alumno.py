@@ -2,6 +2,7 @@ from fastapi import APIRouter, HTTPException, status
 from pydantic import BaseModel
 from typing import List, Optional
 from . import fbcrowned as fb
+from . import sbpostgre as sb
 
 # Creamos el router para los usuarios
 router = APIRouter(

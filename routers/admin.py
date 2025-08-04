@@ -2,6 +2,7 @@ from fastapi import APIRouter, HTTPException, status
 from pydantic import BaseModel
 from typing import List, Optional
 from . import fbcrowned as fb
+from . import sbpostgre as sb
 
 # Creamos el router para los productos
 router = APIRouter(
@@ -22,3 +23,10 @@ class Admin(BaseModel):
 @router.get("/")
 async def root():
     return {"message": "Estas en la seccion de admin"}
+
+@router.get("/postgre")
+async def root():
+    sbconnect = sb.sbPostgre()
+    sbconnect.connect()
+    return sbconnect.test()
+    

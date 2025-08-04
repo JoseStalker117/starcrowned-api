@@ -1,6 +1,5 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from dotenv import load_dotenv
 
 # Importamos los routers de cada modelo
 from routers import admin, alumno, maestro
@@ -34,3 +33,4 @@ async def root():
 if __name__ == "__main__":
     import uvicorn
     uvicorn.run("main:app", host="0.0.0.0", port=7777, reload=True)
+    

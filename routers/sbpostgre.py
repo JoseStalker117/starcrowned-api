@@ -1,4 +1,3 @@
-import psycopg2
 from dotenv import load_dotenv
 import os, psycopg2
 
@@ -9,29 +8,31 @@ HOST = os.getenv("host")
 PORT = os.getenv("port")
 DBNAME = os.getenv("dbname")
 
-# Connect to the database
-try:
-    connection = psycopg2.connect(
-        user=USER,
-        password=PASSWORD,
-        host=HOST,
-        port=PORT,
-        dbname=DBNAME
-    )
-    print("Connection successful!")
-    
-    # Create a cursor to execute SQL queries
-    cursor = connection.cursor()
-    
-    # Example query
-    cursor.execute("SELECT NOW();")
-    result = cursor.fetchone()
-    print("Current Time:", result)
 
-    # Close the cursor and connection
-    cursor.close()
-    connection.close()
-    print("Connection closed.")
+class sbPostgre:
+    def __init__(self):
+        self.connection = None
 
-except Exception as e:
-    print(f"Failed to connect: {e}")
+    def connect(self):
+        try:
+            self.connection = psycopg2.connect(
+                user=USER,
+                password=PASSWORD,
+                host=HOST,
+                port=PORT,
+                dbname=DBNAME
+            )
+            print("[Postgres] Connection successful!")
+        except Exception as e:
+            print(f"[Postgres] Failed to connect: {e}")
+
+    
+    def test(self):
+        cursor = self.connection.cursor()
+        cursor.execute("SELECT * FROM school.escuela;")
+        result = cursor.fetchall()
+        cursor.close()
+        self.connection.close()
+        return result
+
+        

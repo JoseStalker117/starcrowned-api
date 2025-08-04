@@ -4,6 +4,7 @@ from dotenv import load_dotenv
 
 load_dotenv('./config.env')
 
+            
 cred = credentials.Certificate('./routers/starcrowned-key.json')
 try:
     firebase_admin.initialize_app(cred, {
@@ -19,6 +20,7 @@ except Exception as e:
 
 # Funciones de ejemplo para mandar a llamar desde las rutas
 def Login():
+    
     return
 
 def Register():

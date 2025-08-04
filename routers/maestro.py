@@ -3,6 +3,7 @@ from pydantic import BaseModel
 from typing import List, Optional
 from datetime import datetime
 from . import fbcrowned as fb
+from . import sbpostgre as sb
 
 # Creamos el router de maestros
 router = APIRouter(
