@@ -1,6 +1,7 @@
 import firebase_admin, os
-from  firebase_admin import credentials, db
+from  firebase_admin import credentials, firestore
 from dotenv import load_dotenv
+from . import cryptfernet as crypt
 
 load_dotenv('./config.env')
 
@@ -17,14 +18,20 @@ except Exception as e:
     print(f"[Firebase] Error al inicializar: {e}")
 
 
-
-# Funciones de ejemplo para mandar a llamar desde las rutas
-def Login():
+class fbCrowned:
+    def __init__(self):
+        self.fs = firestore.client()
     
-    return
-
-def Register():
-    return
-
-def Database():
-    return
+    def insert(self):
+        try:
+            doc_ref = self.fs.collection('crowned').document('data')
+            doc_ref.set({
+                'name': 'StarCrowned',
+                'description': 'A project to crown the stars.',
+                'status': 'active'
+            })
+            return "Documento insertado correctamente"
+        except Exception as e:
+            return f"Error getting document: {e}"
+        
+        

@@ -1,13 +1,8 @@
 from dotenv import load_dotenv
-import os, psycopg2
+from . import cryptfernet as crypt
+import os, psycopg2, json
 
 load_dotenv('./config.env')
-USER = os.getenv("user")
-PASSWORD = os.getenv("password")
-HOST = os.getenv("host")
-PORT = os.getenv("port")
-DBNAME = os.getenv("dbname")
-
 
 class sbPostgre:
     def __init__(self):
@@ -16,23 +11,27 @@ class sbPostgre:
     def connect(self):
         try:
             self.connection = psycopg2.connect(
-                user=USER,
-                password=PASSWORD,
-                host=HOST,
-                port=PORT,
-                dbname=DBNAME
+                user=       os.getenv("user"),
+                password=   os.getenv("password"),
+                host=       os.getenv("host"),
+                port=       os.getenv("port"),
+                dbname=     os.getenv("dbname")
             )
             print("[Postgres] Connection successful!")
         except Exception as e:
             print(f"[Postgres] Failed to connect: {e}")
+    
+    def disconnect(self):
+        if self.connection:
+            self.connection.close()
 
     
     def test(self):
+        self.connect()
         cursor = self.connection.cursor()
         cursor.execute("SELECT * FROM school.escuela;")
         result = cursor.fetchall()
         cursor.close()
         self.connection.close()
         return result
-
         

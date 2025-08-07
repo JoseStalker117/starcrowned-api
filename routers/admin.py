@@ -27,6 +27,5 @@ async def root():
 @router.get("/postgre")
 async def root():
     sbconnect = sb.sbPostgre()
-    sbconnect.connect()
     return sbconnect.test()
     
