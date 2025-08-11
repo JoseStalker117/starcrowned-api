@@ -47,4 +47,4 @@ async def root(uid: str):
         finally:
             client.sb.disconnect()
 
-    return {"message": "Estas en la seccion de alumno"}
+    return {"message": "Estas en la seccion de alumno"} 

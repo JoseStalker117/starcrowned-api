@@ -6,6 +6,6 @@ services:
     ports:
       - 7777:7777
     volumes:
-      - ./routers:/app/routers/
+      - ./:/app/
 
     command: python3 main.py
