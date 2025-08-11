@@ -1,10 +1,8 @@
 from fastapi import APIRouter, HTTPException, status
-from pydantic import BaseModel
-from typing import List, Optional
 from . import cryptfernet as crypt
 from . import fbcrowned as fb
 from . import sbpostgre as sb
-
+from . import modelos
 
 # Instancia de los objetos de firebase y postgres
 class default():
@@ -20,14 +18,6 @@ router = APIRouter(
     tags=["admin"],
     responses={404: {"description": "No encontrado"}},
 )
-
-# Modelo de datos para Producto
-class Admin(BaseModel):
-    id: Optional[int] = None
-    name: str
-    price: float
-    stock: int = 0
-    description: Optional[str] = None
 
 
 @router.get("/")
