@@ -4,9 +4,15 @@ import os, psycopg2, json
 
 load_dotenv('./config.env')
 
+def load_sql(file_path):
+    with open(file_path, "r", encoding="utf-8") as f:
+        return f.read()
+    
+    
 class sbPostgre:
     def __init__(self):
         self.connection = None
+        self.connect()
 
     def connect(self):
         try:
@@ -17,7 +23,6 @@ class sbPostgre:
                 port=       os.getenv("port"),
                 dbname=     os.getenv("dbname")
             )
-            print("[Postgres] Connection successful!")
         except Exception as e:
             print(f"[Postgres] Failed to connect: {e}")
     
@@ -26,12 +31,18 @@ class sbPostgre:
             self.connection.close()
 
     
-    def test(self):
+    def escuelas(self):
         self.connect()
-        cursor = self.connection.cursor()
-        cursor.execute("SELECT * FROM school.escuela;")
-        result = cursor.fetchall()
-        cursor.close()
-        self.connection.close()
+        querry = load_sql('./querrys/get_escuela.sql')
+        try:
+            with self.connection.cursor() as cursor:
+                cursor.execute(querry)
+                result = cursor.fetchall()
+                
+        except Exception as e:
+            print(f"[Postgres] Error executing query: {e}")
+            result = []
+        finally:
+            self.disconnect()
         return result
         

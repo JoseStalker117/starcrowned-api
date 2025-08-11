@@ -2,7 +2,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 # Importamos los routers de cada modelo
-from routers import admin, alumno, maestro
+from routers import admin, alumno, maestro, default
 
 app = FastAPI(
     title="starcrowned-api",
@@ -23,7 +23,7 @@ app.add_middleware(
 app.include_router(alumno.router)
 app.include_router(maestro.router)
 app.include_router(admin.router)
-
+app.include_router(default.router)
 
 # Ruta raíz
 @app.get("/")

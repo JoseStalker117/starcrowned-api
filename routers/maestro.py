@@ -2,8 +2,18 @@ from fastapi import APIRouter, HTTPException, status
 from pydantic import BaseModel
 from typing import List, Optional
 from datetime import datetime
+from . import cryptfernet as crypt
 from . import fbcrowned as fb
 from . import sbpostgre as sb
+
+# Instancia de los objetos de firebase y postgres
+class default():
+    def __init__(self):
+        self.fb = fb.fbCrowned()
+        self.sb = sb.sbPostgre()
+        self.crypt = crypt.CryptFernet()
+client = default()
+
 
 # Creamos el router de maestros
 router = APIRouter(

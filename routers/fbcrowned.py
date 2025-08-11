@@ -1,11 +1,12 @@
 import firebase_admin, os
 from  firebase_admin import credentials, firestore
-from dotenv import load_dotenv
 from . import cryptfernet as crypt
+from pydantic import BaseModel
+from datetime import datetime
+from dotenv import load_dotenv
 
 load_dotenv('./config.env')
-
-            
+        
 cred = credentials.Certificate('./routers/starcrowned-key.json')
 try:
     firebase_admin.initialize_app(cred, {
@@ -21,17 +22,69 @@ except Exception as e:
 class fbCrowned:
     def __init__(self):
         self.fs = firestore.client()
+        self.crypt = crypt.CryptFernet()
     
-    def insert(self):
+    def roles(self, uid: str):
         try:
-            doc_ref = self.fs.collection('crowned').document('data')
-            doc_ref.set({
-                'name': 'StarCrowned',
-                'description': 'A project to crown the stars.',
-                'status': 'active'
-            })
-            return "Documento insertado correctamente"
+            doc_ref = self.fs.collection('usuarios').document(uid)
+            doc = doc_ref.get()
+            
+            if doc.exists:
+                data = doc.to_dict()
+                return data.get('rol', 'No role found')
+            else:   
+                return "No such document!"
+        except Exception as e:
+            return f"Error getting document: {e}"
+    
+    def fkey(self, uid: str):
+        try:
+            doc_ref = self.fs.collection('usuarios').document(uid)
+            doc = doc_ref.get()
+            
+            if doc.exists:
+                data = doc.to_dict()
+                return data.get('fkey', 'No fkey found')
+            else:   
+                return "No such document!"
         except Exception as e:
             return f"Error getting document: {e}"
         
         
+    def registrar(self, user: BaseModel):
+        try:            
+            doc_ref = self.fs.collection('users').document(user.uid)
+            doc_ref.set({
+                'uid': user.uid,
+                'nombre': user.nombre,
+                'email': user.email,
+                'telefono': user.telefono,
+                'rol': user.rol,
+                'activo': user.activo,
+                'fecha_creacion': user.fecha_creacion.isoformat(),
+                'ultimo_login': user.ultimo_login.isoformat(),
+                'fkey': user.fkey
+                })
+            
+            return "Usuario registrado correctamente"
+        except Exception as e:
+            return f"Error al registrar usuario: {e}"
+        
+    def actualizar(self, uid: str, updates: dict):
+        try:
+            doc_ref = self.fs.collection('users').document(uid)
+            doc_ref.update(updates)
+            return "Usuario actualizado correctamente"
+        except Exception as e:
+            return f"Error al actualizar usuario: {e}"
+        
+    def obtener_usuario(self, uid: str):
+        try:
+            doc_ref = self.fs.collection('usuarios').document(uid)
+            doc = doc_ref.get()
+            if doc.exists:
+                return doc.to_dict()
+            else:
+                return "No such document!"
+        except Exception as e:
+            return f"Error getting document: {e}"
